@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelvin's Flask App</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function loop_status_to_string(loop_status) {
+        return loop_status ? "Running" : "Stopped";
+    }
+
+    $(document).ready(function() {
+        var socket = io();
+
+        socket.on("connect", function() {
+            console.log("Connected to server");
+        });
+
+        socket.on("update_num", function(num) {
+            $("#number").text(num);
+        });
+
+        socket.on("update_loop_status", function(loop_status) {
+            $("#loop_status").text("current loop status: " + loop_status_to_string(loop_status));
+        });
+
+        $("#startloop").click(function () {
+            socket.emit("startloop");
+        });
+
+        $("#stoploop").click(function () {
+            socket.emit("stoploop");
+        });
+    });
+</script>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <h2 id="loop_status">current loop status: Stopped</h2>
+    <h2 id="number">0</h2>
+    <button type="submit" id="startloop">start loop</button>
+    <button type="submit" id="stoploop">stop loop</button>
+</body>
+</html>

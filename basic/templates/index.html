@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelvin's Flask App</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function update_number() {
+            $.ajax({
+                url: "/getnumber",
+                type: "GET",
+                success: function(num) {
+                    $("#number").text(num);
+                    console.log("HELLO");
+                },
+                complete: function() {
+                    setTimeout(update_number, 1000); // update again in 1 second
+                }
+            });
+        }
+        update_number();
+    });
+</script>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <h2>current loop status: {{ loop_status }}</h2>
+    <h2 id="number">0</h2>
+    <form action="/startloop" method="POST">
+        <button type="submit">start loop</button>
+    </form>
+    <form action="/stoploop" method="POST">
+        <button type="submit">stop loop</button>
+    </form>
+</body>
+</html>
